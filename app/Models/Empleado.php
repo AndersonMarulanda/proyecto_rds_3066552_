@@ -20,4 +20,12 @@ class Empleado extends Model
         'estado',
         'id_cargo',
     ];
+
+    /**
+     * Relación: Un empleado pertenece a un cargo específico.
+     */
+    public function cargo()
+    {
+        return $this->belongsTo(Cargo::class, 'id_cargo', 'id');
+    }
 }

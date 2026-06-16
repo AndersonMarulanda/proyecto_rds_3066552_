@@ -14,11 +14,13 @@ class CargoController extends Controller
 
     public function store(Request $request)
     {
-        $cargo = Cargo::create([
-            'nombre_cargo' => $request->nombre_cargo,
-            'salario_base' => $request->salario_base,
-            'estado'       => $request->estado,
+        $data = $request->validate([
+            'nombre_cargo' => 'required|string|max:255',
+            'salario_base' => 'required|numeric|min:0',
+            'estado'       => 'required|in:activo,inactivo',
         ]);
+
+        $cargo = Cargo::create($data);
 
         return response()->json($cargo, 201);
     }
@@ -30,11 +32,13 @@ class CargoController extends Controller
 
     public function update(Request $request, Cargo $cargo)
     {
-        $cargo->update([
-            'nombre_cargo' => $request->nombre_cargo,
-            'salario_base' => $request->salario_base,
-            'estado'       => $request->estado,
+        $data = $request->validate([
+            'nombre_cargo' => 'sometimes|required|string|max:255',
+            'salario_base' => 'sometimes|required|numeric|min:0',
+            'estado'       => 'sometimes|required|in:activo,inactivo',
         ]);
+
+        $cargo->update($data);
 
         return response()->json($cargo, 200);
     }
@@ -42,6 +46,7 @@ class CargoController extends Controller
     public function destroy(Cargo $cargo)
     {
         $cargo->delete();
+
         return response()->json(['message' => 'Cargo eliminado correctamente'], 200);
     }
 }
