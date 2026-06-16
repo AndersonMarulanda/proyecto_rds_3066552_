@@ -6,10 +6,18 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\Cargo;
 use App\Models\Empleado;
+use App\Models\User;
 
 class EmpleadoTest extends TestCase
 {
     use RefreshDatabase;
+
+    private function usuario()
+    {
+        $user = User::factory()->create();
+        $token = $user->createToken('test')->plainTextToken;
+        return ['Authorization' => "Bearer $token"];
+    }
 
     private function cargoValido(): Cargo
     {
@@ -33,7 +41,7 @@ class EmpleadoTest extends TestCase
     {
         $cargo = $this->cargoValido();
 
-        $response = $this->postJson('/api/empleados', $this->datosEmpleado($cargo->id));
+        $response = $this->postJson('/api/empleados', $this->datosEmpleado($cargo->id), $this->usuario());
 
         $response->assertStatus(201)
                  ->assertJsonFragment(['nombres' => 'Juan']);
@@ -41,7 +49,7 @@ class EmpleadoTest extends TestCase
 
     public function test_no_puede_crear_empleado_sin_datos_requeridos()
     {
-        $response = $this->postJson('/api/empleados', []);
+        $response = $this->postJson('/api/empleados', [], $this->usuario());
 
         $response->assertStatus(422)
                  ->assertJsonValidationErrors([
@@ -52,7 +60,7 @@ class EmpleadoTest extends TestCase
 
     public function test_no_puede_crear_empleado_con_cargo_inexistente()
     {
-        $response = $this->postJson('/api/empleados', $this->datosEmpleado(9999));
+        $response = $this->postJson('/api/empleados', $this->datosEmpleado(9999), $this->usuario());
 
         $response->assertStatus(422)
                  ->assertJsonValidationErrors(['id_cargo']);
@@ -62,7 +70,7 @@ class EmpleadoTest extends TestCase
     {
         Empleado::factory()->count(2)->create();
 
-        $response = $this->getJson('/api/empleados');
+        $response = $this->getJson('/api/empleados', $this->usuario());
 
         $response->assertStatus(200)
                  ->assertJsonCount(2);
@@ -72,7 +80,7 @@ class EmpleadoTest extends TestCase
     {
         $empleado = Empleado::factory()->create();
 
-        $response = $this->getJson("/api/empleados/{$empleado->id}");
+        $response = $this->getJson("/api/empleados/{$empleado->id}", $this->usuario());
 
         $response->assertStatus(200)
                  ->assertJsonFragment(['id' => $empleado->id]);
@@ -85,7 +93,7 @@ class EmpleadoTest extends TestCase
         $response = $this->putJson("/api/empleados/{$empleado->id}", [
             'nombres'   => 'Carlos',
             'apellidos' => 'González',
-        ]);
+        ], $this->usuario());
 
         $response->assertStatus(200)
                  ->assertJsonFragment(['nombres' => 'Carlos']);
@@ -95,7 +103,7 @@ class EmpleadoTest extends TestCase
     {
         $empleado = Empleado::factory()->create();
 
-        $response = $this->deleteJson("/api/empleados/{$empleado->id}");
+        $response = $this->deleteJson("/api/empleados/{$empleado->id}", [], $this->usuario());
 
         $response->assertStatus(200)
                  ->assertJsonFragment(['message' => 'Empleado eliminado correctamente']);

@@ -5,10 +5,18 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\Cargo;
+use App\Models\User;
 
 class CargoTest extends TestCase
 {
     use RefreshDatabase;
+
+    private function usuario()
+    {
+        $user = User::factory()->create();
+        $token = $user->createToken('test')->plainTextToken;
+        return ['Authorization' => "Bearer $token"];
+    }
 
     public function test_puede_crear_cargo()
     {
@@ -16,7 +24,7 @@ class CargoTest extends TestCase
             'nombre_cargo' => 'Desarrollador',
             'salario_base' => 3000000,
             'estado'       => 'activo',
-        ]);
+        ], $this->usuario());
 
         $response->assertStatus(201)
                  ->assertJsonFragment(['nombre_cargo' => 'Desarrollador']);
@@ -24,7 +32,7 @@ class CargoTest extends TestCase
 
     public function test_no_puede_crear_cargo_sin_datos_requeridos()
     {
-        $response = $this->postJson('/api/cargos', []);
+        $response = $this->postJson('/api/cargos', [], $this->usuario());
 
         $response->assertStatus(422)
                  ->assertJsonValidationErrors(['nombre_cargo', 'salario_base', 'estado']);
@@ -34,7 +42,7 @@ class CargoTest extends TestCase
     {
         Cargo::factory()->count(3)->create();
 
-        $response = $this->getJson('/api/cargos');
+        $response = $this->getJson('/api/cargos', $this->usuario());
 
         $response->assertStatus(200)
                  ->assertJsonCount(3);
@@ -44,7 +52,7 @@ class CargoTest extends TestCase
     {
         $cargo = Cargo::factory()->create();
 
-        $response = $this->getJson("/api/cargos/{$cargo->id}");
+        $response = $this->getJson("/api/cargos/{$cargo->id}", $this->usuario());
 
         $response->assertStatus(200)
                  ->assertJsonFragment(['id' => $cargo->id]);
@@ -58,7 +66,7 @@ class CargoTest extends TestCase
             'nombre_cargo' => 'Senior Developer',
             'salario_base' => 5000000,
             'estado'       => 'activo',
-        ]);
+        ], $this->usuario());
 
         $response->assertStatus(200)
                  ->assertJsonFragment(['nombre_cargo' => 'Senior Developer']);
@@ -68,7 +76,7 @@ class CargoTest extends TestCase
     {
         $cargo = Cargo::factory()->create();
 
-        $response = $this->deleteJson("/api/cargos/{$cargo->id}");
+        $response = $this->deleteJson("/api/cargos/{$cargo->id}", [], $this->usuario());
 
         $response->assertStatus(200)
                  ->assertJsonFragment(['message' => 'Cargo eliminado correctamente']);
