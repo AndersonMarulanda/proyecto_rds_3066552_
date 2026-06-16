@@ -7,65 +7,46 @@ use Illuminate\Http\Request;
 
 class FuncionCargoController extends Controller
 {
-    /**
-     * Mostrar todas las funciones.
-     */
     public function index()
     {
-        return response()->json(
-            FuncionCargo::with('cargo')->get(),
-            200
-        );
+        return response()->json(FuncionCargo::with('cargo')->get(), 200);
     }
 
-    /**
-     * Crear una nueva función.
-     */
     public function store(Request $request)
     {
-        $funcion = FuncionCargo::create([
-            'descripcion_funcion' => $request->descripcion_funcion,
-            'estado' => $request->estado,
-            'id_cargo' => $request->id_cargo,
+        $data = $request->validate([
+            'descripcion_funcion' => 'required|string',
+            'estado'              => 'required|in:activo,inactivo',
+            'id_cargo'            => 'required|exists:cargos,id',
         ]);
 
-        return response()->json($funcion, 201);
+        $funcion = FuncionCargo::create($data);
+
+        return response()->json($funcion->load('cargo'), 201);
     }
 
-    /**
-     * Mostrar una función específica.
-     */
-    public function show(FuncionCargo $funcionCargo)
+    public function show(FuncionCargo $funcion)
     {
-        return response()->json(
-            $funcionCargo->load('cargo'),
-            200
-        );
+        return response()->json($funcion->load('cargo'), 200);
     }
 
-    /**
-     * Actualizar una función.
-     */
-    public function update(Request $request, FuncionCargo $funcionCargo)
+    public function update(Request $request, FuncionCargo $funcion)
     {
-        $funcionCargo->update([
-            'descripcion_funcion' => $request->descripcion_funcion,
-            'estado' => $request->estado,
-            'id_cargo' => $request->id_cargo,
+        $data = $request->validate([
+            'descripcion_funcion' => 'sometimes|required|string',
+            'estado'              => 'sometimes|required|in:activo,inactivo',
+            'id_cargo'            => 'sometimes|required|exists:cargos,id',
         ]);
 
-        return response()->json($funcionCargo, 200);
+        $funcion->update($data);
+
+        return response()->json($funcion->load('cargo'), 200);
     }
 
-    /**
-     * Eliminar una función.
-     */
-    public function destroy(FuncionCargo $funcionCargo)
+    public function destroy(FuncionCargo $funcion)
     {
-        $funcionCargo->delete();
+        $funcion->delete();
 
-        return response()->json([
-            'message' => 'Función eliminada correctamente'
-        ], 200);
+        return response()->json(['message' => 'Función eliminada correctamente'], 200);
     }
 }
