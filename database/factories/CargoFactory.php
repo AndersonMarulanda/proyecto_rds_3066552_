@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class CargoFactory extends Factory
 {
+    protected $model = Cargo::class;
+
     /**
      * Define the model's default state.
      *
@@ -18,7 +20,8 @@ class CargoFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'nombre_cargo' => fake()->jobTitle(),
+            'descripcion' => fake()->sentence(),
         ];
     }
 }

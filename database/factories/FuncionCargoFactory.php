@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Cargo;
 use App\Models\FuncionCargo;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -10,6 +11,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class FuncionCargoFactory extends Factory
 {
+    protected $model = FuncionCargo::class;
+
     /**
      * Define the model's default state.
      *
@@ -18,7 +21,9 @@ class FuncionCargoFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'descripcion_funcion' => fake()->sentence(),
+            'estado' => fake()->randomElement(['Activo', 'Inactivo']),
+            'id_cargo' => Cargo::factory(),
         ];
     }
 }
