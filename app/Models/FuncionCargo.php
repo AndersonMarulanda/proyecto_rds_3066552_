@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class FuncionCargo extends Model
 {
+    use HasFactory;
+
     protected $table = 'funciones_cargo';
 
     protected $primaryKey = 'id_funcion';
