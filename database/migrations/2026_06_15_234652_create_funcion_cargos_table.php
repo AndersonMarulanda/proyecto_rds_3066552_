@@ -11,8 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('funcion_cargos', function (Blueprint $table) {
-            $table->id();
+        Schema::create('funciones_cargo', function (Blueprint $table) {
+            $table->id('id_funcion');
+            $table->text('descripcion_funcion');
+            $table->enum('estado', ['Activo', 'Inactivo']);
+
+            $table->unsignedBigInteger('id_cargo');
+            $table->foreign('id_cargo')
+                  ->references('id_cargo')
+                  ->on('cargo')
+                  ->onDelete('cascade');
+
             $table->timestamps();
         });
     }
@@ -22,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('funcion_cargos');
+        Schema::dropIfExists('funciones_cargo');
     }
 };

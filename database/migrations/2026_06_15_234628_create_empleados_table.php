@@ -11,8 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('empleados', function (Blueprint $table) {
-            $table->id();
+        Schema::create('empleado', function (Blueprint $table) {
+            $table->id('id_empleado');
+            $table->string('nombres');
+            $table->string('apellidos');
+            $table->date('fecha_nacimiento');
+            $table->date('fecha_ingreso');
+            $table->decimal('salario', 10, 2);
+            $table->enum('estado', ['Activo', 'Inactivo']);
+
+            $table->unsignedBigInteger('id_cargo');
+            $table->foreign('id_cargo')
+                  ->references('id_cargo')
+                  ->on('cargo')
+                  ->onDelete('cascade');
+
             $table->timestamps();
         });
     }
@@ -22,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('empleados');
+        Schema::dropIfExists('empleado');
     }
 };
