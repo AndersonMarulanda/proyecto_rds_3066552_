@@ -5,23 +5,16 @@ namespace Database\Factories;
 use App\Models\Cargo;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory<Cargo>
- */
 class CargoFactory extends Factory
 {
     protected $model = Cargo::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
             'nombre_cargo' => fake()->jobTitle(),
-            'descripcion' => fake()->sentence(),
+            'salario_base' => fake()->numberBetween(1500000, 5000000),
+            'estado' => fake()->randomElement(['activo', 'inactivo']),
         ];
     }
 }

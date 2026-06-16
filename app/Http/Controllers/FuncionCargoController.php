@@ -8,58 +8,64 @@ use Illuminate\Http\Request;
 class FuncionCargoController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Mostrar todas las funciones.
      */
     public function index()
     {
-        //
+        return response()->json(
+            FuncionCargo::with('cargo')->get(),
+            200
+        );
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Crear una nueva función.
      */
     public function store(Request $request)
     {
-        //
+        $funcion = FuncionCargo::create([
+            'descripcion_funcion' => $request->descripcion_funcion,
+            'estado' => $request->estado,
+            'id_cargo' => $request->id_cargo,
+        ]);
+
+        return response()->json($funcion, 201);
     }
 
     /**
-     * Display the specified resource.
+     * Mostrar una función específica.
      */
     public function show(FuncionCargo $funcionCargo)
     {
-        //
+        return response()->json(
+            $funcionCargo->load('cargo'),
+            200
+        );
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(FuncionCargo $funcionCargo)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * Actualizar una función.
      */
     public function update(Request $request, FuncionCargo $funcionCargo)
     {
-        //
+        $funcionCargo->update([
+            'descripcion_funcion' => $request->descripcion_funcion,
+            'estado' => $request->estado,
+            'id_cargo' => $request->id_cargo,
+        ]);
+
+        return response()->json($funcionCargo, 200);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Eliminar una función.
      */
     public function destroy(FuncionCargo $funcionCargo)
     {
-        //
+        $funcionCargo->delete();
+
+        return response()->json([
+            'message' => 'Función eliminada correctamente'
+        ], 200);
     }
 }

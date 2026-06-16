@@ -9,9 +9,7 @@ class Empleado extends Model
 {
     use HasFactory;
 
-    protected $table = 'empleado';
-
-    protected $primaryKey = 'id_empleado';
+    protected $table = 'empleados';
 
     protected $fillable = [
         'nombres',
@@ -20,11 +18,6 @@ class Empleado extends Model
         'fecha_ingreso',
         'salario',
         'estado',
-        'id_cargo'
+        'id_cargo',
     ];
-
-    public function cargo()
-    {
-        return $this->belongsTo(Cargo::class, 'id_cargo');
-    }
 }

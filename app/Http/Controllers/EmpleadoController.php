@@ -7,59 +7,28 @@ use Illuminate\Http\Request;
 
 class EmpleadoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'nombres' => 'required',
+            'apellidos' => 'required',
+            'fecha_nacimiento' => 'required',
+            'fecha_ingreso' => 'required',
+            'salario' => 'required',
+            'estado' => 'required',
+            'id_cargo' => 'required|exists:cargos,id',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Empleado $empleado)
-    {
-        //
-    }
+        $empleado = Empleado::create([
+            'nombres' => $request->nombres,
+            'apellidos' => $request->apellidos,
+            'fecha_nacimiento' => $request->fecha_nacimiento,
+            'fecha_ingreso' => $request->fecha_ingreso,
+            'salario' => $request->salario,
+            'estado' => $request->estado,
+            'id_cargo' => $request->id_cargo,
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Empleado $empleado)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Empleado $empleado)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Empleado $empleado)
-    {
-        //
+        return response()->json($empleado, 201);
     }
 }
