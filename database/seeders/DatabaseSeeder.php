@@ -2,24 +2,20 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Cargo;
+use App\Models\Empleado;
+use App\Models\FuncionCargo;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // 5 cargos, cada uno con 2 funciones y 3 empleados
+        Cargo::factory()
+            ->count(5)
+            ->has(FuncionCargo::factory()->count(2), 'funciones')
+            ->has(Empleado::factory()->count(3), 'empleados')
+            ->create();
     }
 }
