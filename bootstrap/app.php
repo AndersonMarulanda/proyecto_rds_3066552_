@@ -19,4 +19,15 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*'),
         );
+
+        $exceptions->render(function (
+            \Illuminate\Database\Eloquent\ModelNotFoundException $e,
+            Request $request
+        ) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'message' => 'Recurso no encontrado'
+                ], 404);
+            }
+        });
     })->create();
