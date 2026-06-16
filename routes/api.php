@@ -12,4 +12,5 @@ Route::get('/user', function (Request $request) {
 
 Route::apiResource('cargos', CargoController::class);
 Route::apiResource('empleados', EmpleadoController::class);
-Route::apiResource('funciones', FuncionCargoController::class);
+Route::apiResource('funciones', FuncionCargoController::class)
+    ->parameters(['funciones' => 'funcionCargo']);

@@ -25,12 +25,12 @@ class FuncionCargoController extends Controller
         return response()->json($funcion->load('cargo'), 201);
     }
 
-    public function show(FuncionCargo $funcion)
+    public function show(FuncionCargo $funcionCargo)
     {
-        return response()->json($funcion->load('cargo'), 200);
+        return response()->json($funcionCargo->load('cargo'), 200);
     }
 
-    public function update(Request $request, FuncionCargo $funcion)
+    public function update(Request $request, FuncionCargo $funcionCargo)
     {
         $data = $request->validate([
             'descripcion_funcion' => 'sometimes|required|string',
@@ -38,14 +38,14 @@ class FuncionCargoController extends Controller
             'id_cargo'            => 'sometimes|required|exists:cargos,id',
         ]);
 
-        $funcion->update($data);
+        $funcionCargo->update($data);
 
-        return response()->json($funcion->load('cargo'), 200);
+        return response()->json($funcionCargo->load('cargo'), 200);
     }
 
-    public function destroy(FuncionCargo $funcion)
+    public function destroy(FuncionCargo $funcionCargo)
     {
-        $funcion->delete();
+        $funcionCargo->delete();
 
         return response()->json(['message' => 'Función eliminada correctamente'], 200);
     }
