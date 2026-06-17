@@ -11,11 +11,17 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 5 cargos, cada uno con 2 funciones y 3 empleados
-        Cargo::factory()
-            ->count(5)
-            ->has(FuncionCargo::factory()->count(2), 'funciones')
-            ->has(Empleado::factory()->count(3), 'empleados')
+        
+        $cargos = Cargo::factory()
+            ->count(40)
+            ->has(FuncionCargo::factory()->count(5), 'funciones')
             ->create();
+
+        
+        $cargos->each(function ($cargo, $index) {
+            if ($index < 30) {
+                Empleado::factory()->create(['id_cargo' => $cargo->id]);
+            }
+        });
     }
 }
