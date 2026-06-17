@@ -35,6 +35,8 @@ Luego ejecuta:
 php artisan migrate --seed
 ```
 
+Esto crea: **40 cargos**, **30 empleados distribuidos** y **5 funciones por cargo**.
+
 ## Autenticación
 
 Todos los endpoints requieren un token Bearer. Primero regístrate o inicia sesión.
@@ -54,6 +56,14 @@ POST /api/register
 }
 ```
 
+**Respuesta:**
+```json
+{
+    "user": { "id": 1, "name": "Anderson", "email": "anderson@email.com" },
+    "token": "1|abc123..."
+}
+```
+
 ### Login
 
 ```
@@ -64,6 +74,14 @@ POST /api/login
 {
     "email": "anderson@email.com",
     "password": "12345678"
+}
+```
+
+**Respuesta:**
+```json
+{
+    "user": { "id": 1, "name": "Anderson", "email": "anderson@email.com" },
+    "token": "1|abc123..."
 }
 ```
 
@@ -82,18 +100,20 @@ Todos los endpoints requieren el header:
 Authorization: Bearer {token}
 ```
 
+---
+
 ### Cargos
 
 | Método | Endpoint | Descripción |
 |--------|----------|-------------|
-| GET | /api/cargos | Listar todos |
-| POST | /api/cargos | Crear |
-| GET | /api/cargos/{id} | Ver uno |
-| PUT | /api/cargos/{id} | Actualizar |
-| DELETE | /api/cargos/{id} | Eliminar |
+| GET | /api/cargos | Listar todos los cargos |
+| POST | /api/cargos | Crear un cargo |
+| GET | /api/cargos/{id} | Ver un cargo |
+| PUT | /api/cargos/{id} | Actualizar un cargo |
+| DELETE | /api/cargos/{id} | Eliminar un cargo |
+| GET | /api/cargos/{id}/funciones | Listar funciones de un cargo |
 
-**Campos:**
-
+**Campos para crear/actualizar:**
 ```json
 {
     "nombre_cargo": "Desarrollador",
@@ -102,18 +122,24 @@ Authorization: Bearer {token}
 }
 ```
 
+**Validaciones:**
+- `nombre_cargo`: requerido, texto
+- `salario_base`: requerido, numérico, mayor a 0
+- `estado`: requerido, `activo` o `inactivo`
+
+---
+
 ### Empleados
 
 | Método | Endpoint | Descripción |
 |--------|----------|-------------|
-| GET | /api/empleados | Listar todos |
-| POST | /api/empleados | Crear |
-| GET | /api/empleados/{id} | Ver uno |
-| PUT | /api/empleados/{id} | Actualizar |
-| DELETE | /api/empleados/{id} | Eliminar |
+| GET | /api/empleados | Listar todos los empleados |
+| POST | /api/empleados | Crear un empleado |
+| GET | /api/empleados/{id} | Ver detalle de un empleado |
+| PUT | /api/empleados/{id} | Actualizar un empleado |
+| DELETE | /api/empleados/{id} | Eliminar un empleado |
 
-**Campos:**
-
+**Campos para crear/actualizar:**
 ```json
 {
     "nombres": "Juan",
@@ -126,18 +152,48 @@ Authorization: Bearer {token}
 }
 ```
 
+**Detalle de empleado (GET /api/empleados/{id}):**
+```json
+{
+    "id": 1,
+    "nombre": "Juan Pérez",
+    "salario": 2500000,
+    "estado": "activo",
+    "cargo": {
+        "id": 1,
+        "nombre_cargo": "Desarrollador",
+        "salario_base": 3000000
+    },
+    "funciones": [
+        {
+            "id": 1,
+            "descripcion_funcion": "Gestionar equipo de desarrollo",
+            "estado": "activo"
+        }
+    ]
+}
+```
+
+**Validaciones:**
+- `nombres`, `apellidos`: requeridos, texto
+- `fecha_nacimiento`, `fecha_ingreso`: requeridos, fecha
+- `salario`: requerido, numérico, mayor a 0
+- `estado`: requerido, `activo` o `inactivo`
+- `id_cargo`: requerido, debe existir en la tabla cargos
+
+---
+
 ### Funciones de Cargo
 
 | Método | Endpoint | Descripción |
 |--------|----------|-------------|
-| GET | /api/funciones | Listar todas |
-| POST | /api/funciones | Crear |
-| GET | /api/funciones/{id} | Ver una |
-| PUT | /api/funciones/{id} | Actualizar |
-| DELETE | /api/funciones/{id} | Eliminar |
+| GET | /api/funciones | Listar todas las funciones |
+| POST | /api/funciones | Crear una función |
+| GET | /api/funciones/{id} | Ver una función |
+| PUT | /api/funciones/{id} | Actualizar una función |
+| DELETE | /api/funciones/{id} | Eliminar una función |
 
-**Campos:**
-
+**Campos para crear/actualizar:**
 ```json
 {
     "descripcion_funcion": "Gestionar equipo de desarrollo",
@@ -145,6 +201,21 @@ Authorization: Bearer {token}
     "id_cargo": 1
 }
 ```
+
+**Validaciones:**
+- `descripcion_funcion`: requerido, texto
+- `estado`: requerido, `activo` o `inactivo`
+- `id_cargo`: requerido, debe existir en la tabla cargos
+
+---
+
+## Errores comunes
+
+| Código | Descripción |
+|--------|-------------|
+| 401 | No autenticado — falta el token |
+| 404 | Recurso no encontrado |
+| 422 | Error de validación |
 
 ## Tests
 
