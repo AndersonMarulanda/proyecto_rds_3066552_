@@ -49,4 +49,9 @@ class CargoController extends Controller
 
         return response()->json(['message' => 'Cargo eliminado correctamente'], 200);
     }
+
+    public function funciones(Cargo $cargo)
+    {
+        return response()->json($cargo->funciones, 200);
+    }
 }
