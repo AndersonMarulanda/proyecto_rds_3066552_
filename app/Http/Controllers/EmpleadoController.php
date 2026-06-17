@@ -30,9 +30,26 @@ class EmpleadoController extends Controller
     }
 
     public function show(Empleado $empleado)
-    {
-        return response()->json($empleado->load('cargo'), 200);
-    }
+{
+    $empleado->load('cargo.funciones');
+
+    return response()->json([
+        'id'       => $empleado->id,
+        'nombre'   => $empleado->nombres . ' ' . $empleado->apellidos,
+        'salario'  => $empleado->salario,
+        'estado'   => $empleado->estado,
+        'cargo'    => [
+            'id'           => $empleado->cargo->id,
+            'nombre_cargo' => $empleado->cargo->nombre_cargo,
+            'salario_base' => $empleado->cargo->salario_base,
+        ],
+        'funciones' => $empleado->cargo->funciones->map(fn($f) => [
+            'id'                  => $f->id,
+            'descripcion_funcion' => $f->descripcion_funcion,
+            'estado'              => $f->estado,
+        ]),
+    ], 200);
+}
 
     public function update(Request $request, Empleado $empleado)
     {
