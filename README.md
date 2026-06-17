@@ -227,7 +227,7 @@ php artisan test
 
 ## Tecnologías
 
-- Laravel 11
+- Laravel 13
 - Sanctum
 - SQLite (tests)
 - MySQL (producción)
