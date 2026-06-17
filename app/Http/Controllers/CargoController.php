@@ -1,17 +1,23 @@
 <?php
-
+ 
 namespace App\Http\Controllers;
-
+ 
 use App\Models\Cargo;
 use Illuminate\Http\Request;
-
+ 
 class CargoController extends Controller
 {
     public function index()
     {
-        return response()->json(Cargo::all(), 200);
+        $cargos = Cargo::all();
+ 
+        if ($cargos->isEmpty()) {
+            return response()->json(['message' => 'No se encontraron cargos registrados'], 200);
+        }
+ 
+        return response()->json($cargos, 200);
     }
-
+ 
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -19,17 +25,17 @@ class CargoController extends Controller
             'salario_base' => 'required|numeric|min:0',
             'estado'       => 'required|in:activo,inactivo',
         ]);
-
+ 
         $cargo = Cargo::create($data);
-
+ 
         return response()->json($cargo, 201);
     }
-
+ 
     public function show(Cargo $cargo)
     {
         return response()->json($cargo, 200);
     }
-
+ 
     public function update(Request $request, Cargo $cargo)
     {
         $data = $request->validate([
@@ -37,19 +43,19 @@ class CargoController extends Controller
             'salario_base' => 'sometimes|required|numeric|min:0',
             'estado'       => 'sometimes|required|in:activo,inactivo',
         ]);
-
+ 
         $cargo->update($data);
-
+ 
         return response()->json($cargo, 200);
     }
-
+ 
     public function destroy(Cargo $cargo)
     {
         $cargo->delete();
-
+ 
         return response()->json(['message' => 'Cargo eliminado correctamente'], 200);
     }
-
+ 
     public function funciones(Cargo $cargo)
     {
         return response()->json($cargo->funciones, 200);
