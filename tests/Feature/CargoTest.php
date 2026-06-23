@@ -39,14 +39,14 @@ class CargoTest extends TestCase
     }
 
     public function test_puede_listar_cargos()
-    {
-        Cargo::factory()->count(3)->create();
+{
+    Cargo::factory()->count(3)->create();
 
-        $response = $this->getJson('/api/cargos', $this->usuario());
+    $response = $this->getJson('/api/cargos', $this->usuario());
 
-        $response->assertStatus(200)
-                 ->assertJsonCount(3);
-    }
+    $response->assertStatus(200)
+             ->assertJsonCount(3, 'data');
+}
 
     public function test_puede_ver_un_cargo()
     {

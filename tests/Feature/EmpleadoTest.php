@@ -67,14 +67,14 @@ class EmpleadoTest extends TestCase
     }
 
     public function test_puede_listar_empleados()
-    {
-        Empleado::factory()->count(2)->create();
+{
+    Empleado::factory()->count(2)->create();
 
-        $response = $this->getJson('/api/empleados', $this->usuario());
+    $response = $this->getJson('/api/empleados', $this->usuario());
 
-        $response->assertStatus(200)
-                 ->assertJsonCount(2);
-    }
+    $response->assertStatus(200)
+             ->assertJsonCount(2, 'data');
+}
 
     public function test_puede_ver_un_empleado()
     {

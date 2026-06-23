@@ -1,23 +1,19 @@
 <?php
- 
+
 namespace App\Http\Controllers;
- 
+
 use App\Models\Empleado;
 use Illuminate\Http\Request;
- 
+
 class EmpleadoController extends Controller
 {
     public function index()
     {
-        $empleados = Empleado::with('cargo')->get();
- 
-        if ($empleados->isEmpty()) {
-            return response()->json(['message' => 'No se encontraron empleados registrados'], 200);
-        }
- 
+        $empleados = Empleado::with('cargo')->paginate(10);
+
         return response()->json($empleados, 200);
     }
- 
+
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -29,16 +25,22 @@ class EmpleadoController extends Controller
             'estado'           => 'required|in:activo,inactivo',
             'id_cargo'         => 'required|exists:cargos,id',
         ]);
- 
+
         $empleado = Empleado::create($data);
- 
+
         return response()->json($empleado->load('cargo'), 201);
     }
- 
-    public function show(Empleado $empleado)
+
+    public function show($id)
     {
-        $empleado->load('cargo.funciones');
- 
+        $empleado = Empleado::with('cargo.funciones')->find($id);
+
+        if (!$empleado) {
+            return response()->json([
+                'message' => 'EMPLEADO INEXISTENTE'
+            ], 404);
+        }
+
         return response()->json([
             'id'       => $empleado->id,
             'nombre'   => $empleado->nombres . ' ' . $empleado->apellidos,
@@ -56,9 +58,17 @@ class EmpleadoController extends Controller
             ]),
         ], 200);
     }
- 
-    public function update(Request $request, Empleado $empleado)
+
+    public function update(Request $request, $id)
     {
+        $empleado = Empleado::find($id);
+
+        if (!$empleado) {
+            return response()->json([
+                'message' => 'EMPLEADO INEXISTENTE'
+            ], 404);
+        }
+
         $data = $request->validate([
             'nombres'          => 'sometimes|required|string|max:255',
             'apellidos'        => 'sometimes|required|string|max:255',
@@ -68,16 +78,29 @@ class EmpleadoController extends Controller
             'estado'           => 'sometimes|required|in:activo,inactivo',
             'id_cargo'         => 'sometimes|required|exists:cargos,id',
         ]);
- 
+
         $empleado->update($data);
- 
-        return response()->json($empleado->load('cargo'), 200);
+
+        return response()->json([
+            'message' => 'Empleado actualizado correctamente',
+            'empleado' => $empleado->load('cargo')
+        ], 200);
     }
- 
-    public function destroy(Empleado $empleado)
+
+    public function destroy($id)
     {
+        $empleado = Empleado::find($id);
+
+        if (!$empleado) {
+            return response()->json([
+                'message' => 'EMPLEADO INEXISTENTE'
+            ], 404);
+        }
+
         $empleado->delete();
- 
-        return response()->json(['message' => 'Empleado eliminado correctamente'], 200);
+
+        return response()->json([
+            'message' => 'Empleado eliminado correctamente'
+        ], 200);
     }
 }

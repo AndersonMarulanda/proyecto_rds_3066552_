@@ -136,9 +136,9 @@ http://127.0.0.1:8000/api
 ## Registrar usuario
 
 ```bash
-curl -X POST http://127.0.0.1:8000/api/register ^
--H "Accept: application/json" ^
--H "Content-Type: application/json" ^
+curl -X POST http://127.0.0.1:8000/api/register 
+-H "Accept: application/json" 
+-H "Content-Type: application/json" 
 -d "{"name":"Anderson","email":"anderson@example.com","password":"12345678","password_confirmation":"12345678"}"
 ```
 
@@ -147,9 +147,9 @@ curl -X POST http://127.0.0.1:8000/api/register ^
 ## Iniciar sesión
 
 ```bash
-curl -X POST http://127.0.0.1:8000/api/login ^
--H "Accept: application/json" ^
--H "Content-Type: application/json" ^
+curl -X POST http://127.0.0.1:8000/api/login 
+-H "Accept: application/json" 
+-H "Content-Type: application/json" 
 -d "{"email":"anderson@example.com","password":"12345678"}"
 ```
 
@@ -171,39 +171,39 @@ Reemplaza `TU_TOKEN` en las siguientes peticiones.
 ## Listar cargos
 
 ```bash
-curl -X GET http://127.0.0.1:8000/api/cargos ^
+curl -X GET http://127.0.0.1:8000/api/cargos 
 -H "Authorization: Bearer TU_TOKEN"
 ```
 
 ## Obtener un cargo
 
 ```bash
-curl -X GET http://127.0.0.1:8000/api/cargos/1 ^
+curl -X GET http://127.0.0.1:8000/api/cargos/1 
 -H "Authorization: Bearer TU_TOKEN"
 ```
 
 ## Crear un cargo
 
 ```bash
-curl -X POST http://127.0.0.1:8000/api/cargos ^
--H "Authorization: Bearer TU_TOKEN" ^
--H "Content-Type: application/json" ^
+curl -X POST http://127.0.0.1:8000/api/cargos 
+-H "Authorization: Bearer TU_TOKEN" 
+-H "Content-Type: application/json" 
 -d "{"nombre_cargo":"Desarrollador Backend","salario_base":3000000,"estado":"activo"}"
 ```
 
 ## Actualizar un cargo
 
 ```bash
-curl -X PUT http://127.0.0.1:8000/api/cargos/1 ^
--H "Authorization: Bearer TU_TOKEN" ^
--H "Content-Type: application/json" ^
+curl -X PUT http://127.0.0.1:8000/api/cargos/1 
+-H "Authorization: Bearer TU_TOKEN" 
+-H "Content-Type: application/json" 
 -d "{"nombre_cargo":"Desarrollador Senior","salario_base":4500000,"estado":"activo"}"
 ```
 
 ## Eliminar un cargo
 
 ```bash
-curl -X DELETE http://127.0.0.1:8000/api/cargos/1 ^
+curl -X DELETE http://127.0.0.1:8000/api/cargos/1 
 -H "Authorization: Bearer TU_TOKEN"
 ```
 
@@ -212,7 +212,7 @@ curl -X DELETE http://127.0.0.1:8000/api/cargos/1 ^
 ## Obtener las funciones de un cargo
 
 ```bash
-curl -X GET http://127.0.0.1:8000/api/cargos/1/funciones ^
+curl -X GET http://127.0.0.1:8000/api/cargos/1/funciones 
 -H "Authorization: Bearer TU_TOKEN"
 ```
 
@@ -223,39 +223,39 @@ curl -X GET http://127.0.0.1:8000/api/cargos/1/funciones ^
 ## Listar empleados
 
 ```bash
-curl -X GET http://127.0.0.1:8000/api/empleados ^
+curl -X GET http://127.0.0.1:8000/api/empleados 
 -H "Authorization: Bearer TU_TOKEN"
 ```
 
 ## Obtener un empleado
 
 ```bash
-curl -X GET http://127.0.0.1:8000/api/empleados/1 ^
+curl -X GET http://127.0.0.1:8000/api/empleados/1 
 -H "Authorization: Bearer TU_TOKEN"
 ```
 
 ## Crear un empleado
 
 ```bash
-curl -X POST http://127.0.0.1:8000/api/empleados ^
--H "Authorization: Bearer TU_TOKEN" ^
--H "Content-Type: application/json" ^
+curl -X POST http://127.0.0.1:8000/api/empleados 
+-H "Authorization: Bearer TU_TOKEN" 
+-H "Content-Type: application/json" 
 -d "{"nombres":"Juan","apellidos":"Perez","fecha_nacimiento":"2000-05-20","fecha_ingreso":"2026-06-01","salario":2500000,"estado":"activo","id_cargo":1}"
 ```
 
 ## Actualizar un empleado
 
 ```bash
-curl -X PUT http://127.0.0.1:8000/api/empleados/1 ^
--H "Authorization: Bearer TU_TOKEN" ^
--H "Content-Type: application/json" ^
+curl -X PUT http://127.0.0.1:8000/api/empleados/1 
+-H "Authorization: Bearer TU_TOKEN" 
+-H "Content-Type: application/json" 
 -d "{"salario":3000000}"
 ```
 
 ## Eliminar un empleado
 
 ```bash
-curl -X DELETE http://127.0.0.1:8000/api/empleados/1 ^
+curl -X DELETE http://127.0.0.1:8000/api/empleados/1 
 -H "Authorization: Bearer TU_TOKEN"
 ```
 
@@ -266,39 +266,39 @@ curl -X DELETE http://127.0.0.1:8000/api/empleados/1 ^
 ## Listar funciones
 
 ```bash
-curl -X GET http://127.0.0.1:8000/api/funciones ^
+curl -X GET http://127.0.0.1:8000/api/funciones 
 -H "Authorization: Bearer TU_TOKEN"
 ```
 
 ## Obtener una función
 
 ```bash
-curl -X GET http://127.0.0.1:8000/api/funciones/1 ^
+curl -X GET http://127.0.0.1:8000/api/funciones/1 
 -H "Authorization: Bearer TU_TOKEN"
 ```
 
 ## Crear una función
 
 ```bash
-curl -X POST http://127.0.0.1:8000/api/funciones ^
--H "Authorization: Bearer TU_TOKEN" ^
--H "Content-Type: application/json" ^
+curl -X POST http://127.0.0.1:8000/api/funciones 
+-H "Authorization: Bearer TU_TOKEN" 
+-H "Content-Type: application/json" 
 -d "{"descripcion_funcion":"Administrar servidores","estado":"activo","id_cargo":1}"
 ```
 
 ## Actualizar una función
 
 ```bash
-curl -X PUT http://127.0.0.1:8000/api/funciones/1 ^
--H "Authorization: Bearer TU_TOKEN" ^
--H "Content-Type: application/json" ^
+curl -X PUT http://127.0.0.1:8000/api/funciones/1 
+-H "Authorization: Bearer TU_TOKEN" 
+-H "Content-Type: application/json" 
 -d "{"descripcion_funcion":"Gestionar infraestructura"}"
 ```
 
 ## Eliminar una función
 
 ```bash
-curl -X DELETE http://127.0.0.1:8000/api/funciones/1 ^
+curl -X DELETE http://127.0.0.1:8000/api/funciones/1 
 -H "Authorization: Bearer TU_TOKEN"
 ```
 
